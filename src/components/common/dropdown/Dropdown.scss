@@ -1,0 +1,41 @@
+@import "../../../sass/variables";
+
+.Dropdown {
+  position: relative;
+
+  &__element-container {
+
+  }
+
+  &__list {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    box-shadow: 0 3px 10px $color-grey;
+    min-width: 100px;
+    background-color: white;
+    list-style: none;
+    z-index: 3;
+  }
+
+  &__list-item {
+    line-height: 1;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: $color-blue;
+
+    a {
+      text-decoration: none;
+      color: $color-blue;
+    }
+
+    &:hover {
+      background-color: rgba($color-primary, 0.8);
+      color: white;
+
+      a {
+        color: white;
+      }
+    }
+  }
+}

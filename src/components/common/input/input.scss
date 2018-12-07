@@ -1,0 +1,27 @@
+@import "../../../sass/variables";
+
+.Input {
+
+  &__text-input {
+    padding: 10px 15px;
+    margin-top: 28px;
+    border: 1px solid $color-grey;
+    transition: box-shadow 0.25s;
+    min-width: 200px;
+
+    &:active,
+    &:focus {
+      outline: none;
+      box-shadow: 0 3px 10px $color-grey;
+    }
+  }
+
+  &__label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 14px;
+    color: darken($color-grey, 30);
+    font-weight: 300;
+  }
+}

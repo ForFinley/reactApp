@@ -1,0 +1,7 @@
+@import "../../../sass/variables";
+
+.FullPage {
+  min-height: calc(100vh - #{$navbar-height});
+  position: relative;
+  padding: 20px;
+}

@@ -1,0 +1,27 @@
+@import "../../../sass/variables";
+@import "../../../sass/mixins";
+
+.Form {
+  @include centerVH;
+  box-shadow: 0 3px 10px $color-grey;
+  padding: 50px 75px;
+
+  &__heading {
+    margin-bottom: 30px;
+    color: $color-primary;
+    font-weight: 300;
+    font-size: 40px;
+  }
+
+  &__error-text {
+    font-size: 12px;
+    font-weight: 300;
+    color: $color-error;
+  }
+
+  &__loading-text {
+    font-size: 16px;
+    font-weight: 300;
+    color: $color-primary;
+  }
+}

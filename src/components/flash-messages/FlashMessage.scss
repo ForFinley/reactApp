@@ -1,0 +1,34 @@
+$flashMessageHeight: 75px;
+@import "../../sass/variables";
+
+.FlashMessage {
+  display: block;
+  height: $flashMessageHeight;
+  line-height: $flashMessageHeight;
+  margin-bottom: 3px;
+  font-weight: 100;
+
+  &--success {
+    background-color: $color-primary;
+    color: white;
+  }
+
+  &--danger {
+    background-color: $color-error;
+    color: white;
+  }
+
+  &__message {
+    padding-left: 20px;
+
+  }
+
+  &__x {
+    float: right;
+    cursor: pointer;
+    padding-right: 20px;
+    font-size: 28px;
+    font-weight: 100;
+  }
+
+}
