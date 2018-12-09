@@ -5,38 +5,26 @@ import Form from "../common/form";
 import FormGroup from "../common/form-group";
 import FullPage from "../common/containers/FullPage";
 import Button from "../common/button";
-import { bootstrapFormHandler } from "../../services/formHandler";
+import withFormValidation from '../hoc/withFormValidation';
 import { loginFormValidator } from "./loginFormValidator";
 import "./Login.scss";
 
 class Login extends React.Component {
-  state = {
-    formValues: { username: "", password: "" },
-    touched: { username: false, password: false },
-    validationMessage: { username: "", password: "" },
-    formIsValid: true
-  };
-
-  constructor(props) {
-    super(props);
-    //sets up reusable form handler logic
-    bootstrapFormHandler(this, loginFormValidator);
-  }
 
   submit = (e, loginFn) => {
     e.preventDefault();
     e.stopPropagation();
-    this.runFormValidation(() => {
-      if (this.state.formIsValid) {
-        const { username, password } = this.state.formValues;
+    this.props.runFormValidation(() => {
+      if (this.props.formIsValid) {
+        const { username, password } = this.props.formValues;
         loginFn({ username, password });
       }
     }, true);
   };
 
   render() {
-    const { username, password } = this.state.formValues;
-    const { touched, validationMessage } = this.state;
+    const { username, password } = this.props.formValues;
+    const { touched, validationMessage, handleChange, handleBlur } = this.props;
     return (
       <AuthConsumer>
         {({ login, loginLoading, loginError }) => (
@@ -50,9 +38,9 @@ class Login extends React.Component {
                   value={username}
                   type="text"
                   name="username"
-                  onChange={this.handleChange}
+                  onChange={handleChange}
                   id="username"
-                  onBlur={this.handleBlur}
+                  onBlur={handleBlur}
                   touched={touched.username}
                   validationMessage={validationMessage.username}
                 />
@@ -64,9 +52,9 @@ class Login extends React.Component {
                   value={password}
                   type="password"
                   name="password"
-                  onChange={this.handleChange}
+                  onChange={handleChange}
                   id="password"
-                  onBlur={this.handleBlur}
+                  onBlur={handleBlur}
                   touched={touched.password}
                   validationMessage={validationMessage.password}
                 />
@@ -97,4 +85,4 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+export default withFormValidation(Login, ['username', 'password'], loginFormValidator);
