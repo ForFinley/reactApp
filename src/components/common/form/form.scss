@@ -5,6 +5,7 @@
   @include centerVH;
   box-shadow: 0 3px 10px $color-grey;
   padding: 50px 75px;
+  min-width: 400px;
 
   &__heading {
     margin-bottom: 30px;

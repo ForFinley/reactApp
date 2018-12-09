@@ -17,7 +17,7 @@ const Input = ({
     <input
       className={`Input__text-input ${
         touched && validationMessage ? "Input__text-input--error" : ""
-      }`}
+      } ${touched && !validationMessage ? "Input__text-input--success" : ""}`}
       value={value}
       id={id}
       name={name}
