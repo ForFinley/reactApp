@@ -1,16 +1,40 @@
 import React from "react";
-import Input from '../common/input';
-import Form from '../common/form';
-import FormGroup from '../common/form-group';
-import FullPage from '../common/containers/FullPage';
-import Button from '../common/button';
-import {signUp} from '../../services/AuthService';
-import {withRouter} from 'react-router-dom';
+import Input from "../common/input";
+import Form from "../common/form";
+import FormGroup from "../common/form-group";
+import FullPage from "../common/containers/FullPage";
+import Button from "../common/button";
+import { bootstrapFormHandler } from "../../services/formHandler";
+import { signUpFormValidator } from "./signUpFormValidator";
+import { signUp } from "../../services/AuthService";
+import { withRouter } from "react-router-dom";
 import "./SignUp.scss";
 
 class SignUp extends React.Component {
-  state = { username: "", mail: "", password: "", loading: false, error: false };
+  state = {
+    loading: false,
+    error: false,
+    formValues: { username: "", email: "", password: "", confirmPassword: "" },
+    touched: {
+      username: false,
+      password: false,
+      email: false,
+      confirmPassword: false
+    },
+    validationMessage: {
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: ""
+    },
+    formIsValid: true
+  };
 
+  constructor(props) {
+    super(props);
+    //sets up reusable form handler logic
+    bootstrapFormHandler(this, signUpFormValidator);
+  }
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
@@ -18,39 +42,92 @@ class SignUp extends React.Component {
   submit = e => {
     e.preventDefault();
     e.stopPropagation();
-    this.setState({loading: true, error: false}, () => {
-      const { email, password, username } = this.state;
-      signUp({username, email, password})
-        .then(res => {
-          this.setState({loading: false})
+    this.runFormValidation(() => {
+      if (this.state.formIsValid) {
+        this.setState({ loading: true, error: false }, () => {
+          const { email, password, username } = this.state.formValues;
+          signUp({ username, email, password })
+            .then(res => {
+              this.setState({ loading: false });
 
-          this.props.history.push('/login');
-        })
-        .catch(err => {
-          this.setState({loading: false})
-          console.log(err);
-        })
-    })
-
+              this.props.history.push("/login");
+            })
+            .catch(err => {
+              this.setState({ loading: false });
+              console.log(err);
+            });
+        });
+      }
+    }, true);
   };
 
   render() {
-    const { username, email, password, error, loading } = this.state;
+    const {
+      username,
+      email,
+      password,
+      confirmPassword
+    } = this.state.formValues;
+    const { touched, validationMessage, error, loading } = this.state;
     return (
       <FullPage>
         <Form onSubmit={this.submit}>
           <h1 className="Form__heading">Sign Up</h1>
 
           <FormGroup>
-            <Input label="Username" value={username} type="text" name="username" onChange={this.handleChange} id="username" />
+            <Input
+              label="Username"
+              value={username}
+              type="text"
+              name="username"
+              onChange={this.handleChange}
+              id="username"
+              onBlur={this.handleBlur}
+              touched={touched.username}
+              validationMessage={validationMessage.username}
+            />
           </FormGroup>
 
           <FormGroup>
-            <Input label="Email" value={email} type="text" name="email" onChange={this.handleChange} id="email" />
+            <Input
+              label="Email"
+              value={email}
+              type="text"
+              name="email"
+              onChange={this.handleChange}
+              id="email"
+              onBlur={this.handleBlur}
+              touched={touched.email}
+              validationMessage={validationMessage.email}
+            />
           </FormGroup>
 
           <FormGroup>
-            <Input label="Password" value={password} type="password" name="password" onChange={this.handleChange} id="password" />
+            <Input
+              label="Password"
+              value={password}
+              type="password"
+              name="password"
+              onChange={this.handleChange}
+              id="password"
+              onBlur={this.handleBlur}
+              touched={touched.password}
+              validationMessage={validationMessage.password}
+            />
+          </FormGroup>
+
+          <FormGroup>
+            <Input
+              label="Confirm Password"
+              value={confirmPassword}
+              type="password"
+              name="confirmPassword"
+              onChange={this.handleChange}
+              id="confirmPassword"
+              onBlur={this.handleBlur}
+              touched={touched.confirmPassword}
+              validationMessage={validationMessage.confirmPassword}
+            />
           </FormGroup>
 
           {!loading && (
