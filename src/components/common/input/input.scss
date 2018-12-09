@@ -1,7 +1,6 @@
 @import "../../../sass/variables";
 
 .Input {
-
   &__text-input {
     padding: 10px 15px;
     margin-top: 28px;
@@ -14,6 +13,10 @@
       outline: none;
       box-shadow: 0 3px 10px $color-grey;
     }
+
+    &--error {
+      border: 1px solid $color-error;
+    }
   }
 
   &__label {
@@ -23,5 +26,12 @@
     font-size: 14px;
     color: darken($color-grey, 30);
     font-weight: 300;
+  }
+
+  &__validation-message {
+    font-size: 12px;
+    padding-top: 5px;
+    padding-left: 5px;
+    color: $color-error;
   }
 }

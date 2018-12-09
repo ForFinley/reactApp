@@ -8,6 +8,7 @@ import Profile from "./components/profile/Profile";
 import Settings from "./components/settings/Settings";
 import Navbar from "./components/navbar/Navbar";
 import Verify from "./components/verify/Verify";
+import ResetPassword from "./components/reset-password/ResetPassword";
 import FlashMessageContainer from "./components/flash-messages/FlashMessageContainer";
 import { AuthConsumer } from "./context/Auth";
 import mustBeLoggedIn from "./components/hoc/mustBeLoggedIn";
@@ -24,6 +25,11 @@ class App extends React.Component {
             <FlashMessageContainer />
             <Route exact path="/" component={Public} />
             <Route exact path="/verify/:hash" component={Verify} />
+            <Route
+              exact
+              path="/resetPassword/:hash"
+              component={ResetPassword}
+            />
             <Route exact path="/home" component={mustBeLoggedIn(Home)} />
             <Route exact path="/profile" component={mustBeLoggedIn(Profile)} />
             <Route

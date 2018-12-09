@@ -1,28 +1,42 @@
 import React from "react";
 import { AuthConsumer } from "../../context/Auth";
-import Input from '../common/input';
-import Form from '../common/form';
-import FormGroup from '../common/form-group';
-import FullPage from '../common/containers/FullPage';
-import Button from '../common/button';
+import Input from "../common/input";
+import Form from "../common/form";
+import FormGroup from "../common/form-group";
+import FullPage from "../common/containers/FullPage";
+import Button from "../common/button";
+import { bootstrapFormHandler } from "../../services/formHandler";
+import { loginFormValidator } from "./loginFormValidator";
 import "./Login.scss";
 
 class Login extends React.Component {
-  state = { username: "", password: "" };
-
-  handleChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
+  state = {
+    formValues: { username: "", password: "" },
+    touched: { username: false, password: false },
+    validationMessage: { username: "", password: "" },
+    formIsValid: true
   };
 
+  constructor(props) {
+    super(props);
+    //sets up reusable form handler logic
+    bootstrapFormHandler(this, loginFormValidator);
+  }
+
   submit = (e, loginFn) => {
-    const { username, password } = this.state;
     e.preventDefault();
     e.stopPropagation();
-    loginFn({username, password});
+    this.runFormValidation(() => {
+      if (this.state.formIsValid) {
+        const { username, password } = this.state.formValues;
+        loginFn({ username, password });
+      }
+    }, true);
   };
 
   render() {
-    const { username, password } = this.state;
+    const { username, password } = this.state.formValues;
+    const { touched, validationMessage } = this.state;
     return (
       <AuthConsumer>
         {({ login, loginLoading, loginError }) => (
@@ -31,11 +45,31 @@ class Login extends React.Component {
               <h1 className="Form__heading">Login</h1>
 
               <FormGroup>
-                <Input label="Username" value={username} type="text" name="username" onChange={this.handleChange} id="username" />
+                <Input
+                  label="Username"
+                  value={username}
+                  type="text"
+                  name="username"
+                  onChange={this.handleChange}
+                  id="username"
+                  onBlur={this.handleBlur}
+                  touched={touched.username}
+                  validationMessage={validationMessage.username}
+                />
               </FormGroup>
 
               <FormGroup>
-                <Input label="Password" value={password} type="password" name="password" onChange={this.handleChange} id="password" />
+                <Input
+                  label="Password"
+                  value={password}
+                  type="password"
+                  name="password"
+                  onChange={this.handleChange}
+                  id="password"
+                  onBlur={this.handleBlur}
+                  touched={touched.password}
+                  validationMessage={validationMessage.password}
+                />
               </FormGroup>
 
               {!loginLoading && (

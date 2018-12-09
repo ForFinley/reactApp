@@ -18,3 +18,6 @@ export const changePassword = data =>
 
 export const verifyEmail = hash =>
   axios.get(`${BASE_URL}/userService/verifyEmail/${hash}`);
+
+export const resetPassword = data =>
+  axios.post(`${BASE_URL}/userService/resetPassword`, data, { headers });
