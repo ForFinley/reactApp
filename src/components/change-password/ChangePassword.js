@@ -3,57 +3,62 @@ import FormGroup from '../common/form-group';
 import Input from '../common/input';
 import Button from '../common/button'
 import { changePassword } from '../../services/AuthService';
+import withFormValidation from '../hoc/withFormValidation';
+import { changePasswordFormValidator } from './changePasswordFormValidator';
 import { FlashMessagesConsumer } from '../../context/FlashMessages';
 import './ChangePassword.scss';
 
 class ChangePassword extends React.Component {
 
   state = {
-    password: '',
-    newPassword: '',
     loading: false,
-    error: '',
-    successMessage: ''
+    error: ''
   }
-
-  handleChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
 
   submit = (e, addMessage) => {
     e.preventDefault();
     e.stopPropagation();
-    this.setState({loading: true, error: '', successMessage: ''}, () => {
-      const { password, newPassword } = this.state;
-      changePassword({ password, newPassword, username: this.props.username })
-        .then(res => {
-          this.setState({loading: false, successMessage: 'Password changed successfully!', newPassword: '', password: ''}, () => {
-            addMessage({type: 'success', message: 'Password changed successfully!'})
-          })
+    this.props.runFormValidation(() => {
+      if (this.props.formIsValid) {
+        this.setState({loading: true, error: ''}, () => {
+          const { password, newPassword } = this.props.formValues;
+          changePassword({ password, newPassword, username: this.props.username })
+            .then(res => {
+              this.setState({loading: false, successMessage: 'Password changed successfully!'}, () => {
+                addMessage({type: 'success', message: 'Password changed successfully!'})
+              })
+            })
+            .catch(err => {
+              this.setState({loading: false}, () => {
+                addMessage({type: 'danger', message: 'An error occurred changing your password'})
+              })
+            })
         })
-        .catch(err => {
-          this.setState({loading: false}, () => {
-            addMessage({type: 'danger', message: 'An error occurred changing your password'})
-          })
-          console.log(err);
-        })
-    })
+      }
+    }, true)
+
 
   };
 
   render() {
-    const { password, newPassword, loading, error, successMessage } = this.state;
+    const { loading, error } = this.state;
+    const { password, newPassword, confirmNewPassword } = this.props.formValues;
+    const { handleChange, handleBlur, validationMessage, touched } = this.props;
 
     return (
       <div className="ChangePassword">
         <h3>Change Password</h3>
 
         <FormGroup>
-          <Input label="Current Password" value={password} type="password" name="password" onChange={this.handleChange} id="password" />
+          <Input label="Current Password" value={password} type="password" name="password" onChange={handleChange} id="password" onBlur={handleBlur} touched={touched.password} validationMessage={validationMessage.password} />
         </FormGroup>
 
         <FormGroup>
-          <Input label="New Password" value={newPassword} type="password" name="newPassword" onChange={this.handleChange} id="newPassword" />
+          <Input label="New Password" value={newPassword} type="password" name="newPassword" onChange={handleChange} id="newPassword" onBlur={handleBlur} touched={touched.newPassword} validationMessage={validationMessage.newPassword} />
+        </FormGroup>
+
+        <FormGroup>
+          <Input label="Confirm New Password" value={confirmNewPassword} type="password" name="confirmNewPassword" onChange={handleChange} id="confirmNewPassword" onBlur={handleBlur} touched={touched.confirmNewPassword} validationMessage={validationMessage.confirmNewPassword} />
         </FormGroup>
 
         {!loading && (
@@ -73,11 +78,6 @@ class ChangePassword extends React.Component {
             <div className="Form__loading-text">Submitting...</div>
           </FormGroup>
         )}
-        {!loading && !error && successMessage && (
-          <FormGroup>
-            <div className="Form__loading-text">{successMessage}</div>
-          </FormGroup>
-        )}
         {error &&
           !loading && (
             <FormGroup>
@@ -90,4 +90,4 @@ class ChangePassword extends React.Component {
 
 }
 
-export default ChangePassword;
+export default withFormValidation(ChangePassword, ['password', 'newPassword', 'confirmNewPassword'], changePasswordFormValidator);
