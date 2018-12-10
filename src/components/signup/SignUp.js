@@ -4,7 +4,7 @@ import Form from "../common/form";
 import FormGroup from "../common/form-group";
 import FullPage from "../common/containers/FullPage";
 import Button from "../common/button";
-import { bootstrapFormHandler } from "../../services/formHandler";
+import withFormValidation from '../hoc/withFormValidation';
 import { signUpFormValidator } from "./signUpFormValidator";
 import { signUp } from "../../services/AuthService";
 import { withRouter } from "react-router-dom";
@@ -13,28 +13,9 @@ import "./SignUp.scss";
 class SignUp extends React.Component {
   state = {
     loading: false,
-    error: false,
-    formValues: { username: "", email: "", password: "", confirmPassword: "" },
-    touched: {
-      username: false,
-      password: false,
-      email: false,
-      confirmPassword: false
-    },
-    validationMessage: {
-      username: "",
-      email: "",
-      password: "",
-      confirmPassword: ""
-    },
-    formIsValid: true
+    error: false
   };
 
-  constructor(props) {
-    super(props);
-    //sets up reusable form handler logic
-    bootstrapFormHandler(this, signUpFormValidator);
-  }
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
@@ -42,10 +23,10 @@ class SignUp extends React.Component {
   submit = e => {
     e.preventDefault();
     e.stopPropagation();
-    this.runFormValidation(() => {
-      if (this.state.formIsValid) {
+    this.props.runFormValidation(() => {
+      if (this.props.formIsValid) {
         this.setState({ loading: true, error: false }, () => {
-          const { email, password, username } = this.state.formValues;
+          const { email, password, username } = this.props.formValues;
           signUp({ username, email, password })
             .then(res => {
               this.setState({ loading: false });
@@ -67,8 +48,9 @@ class SignUp extends React.Component {
       email,
       password,
       confirmPassword
-    } = this.state.formValues;
-    const { touched, validationMessage, error, loading } = this.state;
+    } = this.props.formValues;
+    const { touched, validationMessage, handleBlur, handleChange } = this.props;
+    const { error, loading } = this.state;
     return (
       <FullPage>
         <Form onSubmit={this.submit}>
@@ -80,9 +62,9 @@ class SignUp extends React.Component {
               value={username}
               type="text"
               name="username"
-              onChange={this.handleChange}
+              onChange={handleChange}
               id="username"
-              onBlur={this.handleBlur}
+              onBlur={handleBlur}
               touched={touched.username}
               validationMessage={validationMessage.username}
             />
@@ -94,9 +76,9 @@ class SignUp extends React.Component {
               value={email}
               type="text"
               name="email"
-              onChange={this.handleChange}
+              onChange={handleChange}
               id="email"
-              onBlur={this.handleBlur}
+              onBlur={handleBlur}
               touched={touched.email}
               validationMessage={validationMessage.email}
             />
@@ -108,9 +90,9 @@ class SignUp extends React.Component {
               value={password}
               type="password"
               name="password"
-              onChange={this.handleChange}
+              onChange={handleChange}
               id="password"
-              onBlur={this.handleBlur}
+              onBlur={handleBlur}
               touched={touched.password}
               validationMessage={validationMessage.password}
             />
@@ -122,9 +104,9 @@ class SignUp extends React.Component {
               value={confirmPassword}
               type="password"
               name="confirmPassword"
-              onChange={this.handleChange}
+              onChange={handleChange}
               id="confirmPassword"
-              onBlur={this.handleBlur}
+              onBlur={handleBlur}
               touched={touched.confirmPassword}
               validationMessage={validationMessage.confirmPassword}
             />
@@ -138,7 +120,7 @@ class SignUp extends React.Component {
 
           {loading && (
             <FormGroup>
-              <div className="Form__loading-text">Logging In...</div>
+              <div className="Form__loading-text">Signing Up...</div>
             </FormGroup>
           )}
           {error &&
@@ -153,4 +135,8 @@ class SignUp extends React.Component {
   }
 }
 
-export default withRouter(SignUp);
+export default withRouter(
+  withFormValidation(
+    SignUp, ['username', 'email', 'password', 'confirmPassword'], signUpFormValidator
+  )
+);
