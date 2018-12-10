@@ -2,24 +2,27 @@ import React from 'react';
 
 export default function withFormValidation (WrappedComponent, formConfig, validateHandler) {
 
+
+  const initialState = {
+    formIsValid: false,
+    formValues: {},
+    touched: {},
+    validationMessage: {}
+  }
+
+  formConfig.forEach(i => {
+    initialState.formValues[i] = '';
+    initialState.touched[i] = false;
+    initialState.validationMessage[i] = ''
+  })
+
+
   class ComponentWithFormValidation extends React.Component {
 
     constructor() {
       super();
 
-      const initialState = {
-        formIsValid: true,
-        formValues: {},
-        touched: {},
-        validationMessage: {}
-      }
-      formConfig.forEach(i => {
-        initialState.formValues[i] = '';
-        initialState.touched[i] = false;
-        initialState.validationMessage[i] = ''
-      })
-
-      this.state = initialState;
+      this.state = {...initialState};
     }
 
     handleChange = e => {
@@ -63,10 +66,15 @@ export default function withFormValidation (WrappedComponent, formConfig, valida
       );
     };
 
+    resetForm = () => {
+      this.setState({...initialState})
+    }
+
     render() {
       return <WrappedComponent  handleChange={this.handleChange}
                                 handleBlur={this.handleBlur}
                                 runFormValidation={this.runFormValidation}
+                                resetForm={this.resetForm}
                                 {...this.state}
               />
     }

@@ -25,7 +25,8 @@ class ChangePassword extends React.Component {
           changePassword({ password, newPassword, username: this.props.username })
             .then(res => {
               this.setState({loading: false, successMessage: 'Password changed successfully!'}, () => {
-                addMessage({type: 'success', message: 'Password changed successfully!'})
+                addMessage({type: 'success', message: 'Password changed successfully!'});
+                this.props.resetForm();
               })
             })
             .catch(err => {
