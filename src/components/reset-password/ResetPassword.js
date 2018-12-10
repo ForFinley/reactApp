@@ -5,51 +5,50 @@ import Input from "../common/input";
 import Form from "../common/form";
 import FormGroup from "../common/form-group";
 import Button from "../common/button";
+import withFormValidation from '../hoc/withFormValidation';
+import { resetPasswordFormValidator } from './resetPasswordFormValidator';
 import { resetPassword } from "../../services/AuthService";
 import { withRouter } from "react-router-dom";
 import "./ResetPassword.scss";
 
 class ResetPassword extends React.Component {
   state = {
-    newPassword: "",
-    confirmNewPassword: "",
     loading: false,
     error: false
-  };
-
-  handleChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
   };
 
   submit = (e, addMessage) => {
     e.preventDefault();
     e.stopPropagation();
-    const { newPassword, confirmNewPassword } = this.state;
-    const hash = this.props.match.params.hash;
-    if (newPassword !== confirmNewPassword) {
-      return this.setState({ error: "Passwords must match" });
-    }
-    this.setState({ loading: true, error: false }, () => {
-      resetPassword({ newPassword, hash })
-        .then(res => {
-          addMessage({ type: "success", message: "Password reset success!" });
-          this.props.history.push("/login");
-        })
-        .catch(err => {
-          this.setState({
-            error: "An error occured resetting password",
-            loading: false
-          });
-          addMessage({
-            type: "danger",
-            message: "An error occured resetting password"
-          });
+    this.props.runFormValidation(() => {
+      if (this.props.formIsValid) {
+        const { newPassword } = this.props.formValues;
+        const hash = this.props.match.params.hash;
+        this.setState({ loading: true, error: false }, () => {
+          resetPassword({ newPassword, hash })
+            .then(res => {
+              addMessage({ type: "success", message: "Password reset success!" });
+              this.props.history.push("/login");
+            })
+            .catch(err => {
+              this.setState({
+                error: "An error occured resetting password",
+                loading: false
+              });
+              addMessage({
+                type: "danger",
+                message: "An error occured resetting password"
+              });
+            });
         });
-    });
+      }
+    }, true);
   };
 
   render() {
-    const { newPassword, confirmNewPassword, loading, error } = this.state;
+    const { loading, error } = this.state;
+    const { newPassword, confirmNewPassword } = this.props.formValues;
+    const { handleBlur, handleChange, validationMessage, touched } = this.props;
     return (
       <FlashMessagesConsumer>
         {({ addMessage }) => (
@@ -63,8 +62,11 @@ class ResetPassword extends React.Component {
                   value={newPassword}
                   type="password"
                   name="newPassword"
-                  onChange={this.handleChange}
+                  onChange={handleChange}
                   id="newPassword"
+                  onBlur={handleBlur}
+                  touched={touched.newPassword}
+                  validationMessage={validationMessage.newPassword}
                 />
               </FormGroup>
 
@@ -74,8 +76,11 @@ class ResetPassword extends React.Component {
                   value={confirmNewPassword}
                   type="password"
                   name="confirmNewPassword"
-                  onChange={this.handleChange}
+                  onChange={handleChange}
                   id="confirmNewPassword"
+                  onBlur={handleBlur}
+                  touched={touched.confirmNewPassword}
+                  validationMessage={validationMessage.confirmNewPassword}
                 />
               </FormGroup>
 
@@ -87,7 +92,7 @@ class ResetPassword extends React.Component {
 
               {loading && (
                 <FormGroup>
-                  <div className="Form__loading-text">Changing Password...</div>
+                  <div className="Form__loading-text">Resetting Password...</div>
                 </FormGroup>
               )}
               {error &&
@@ -104,4 +109,4 @@ class ResetPassword extends React.Component {
   }
 }
 
-export default withRouter(ResetPassword);
+export default withRouter(withFormValidation(ResetPassword, ['newPassword', 'confirmNewPassword'], resetPasswordFormValidator));
