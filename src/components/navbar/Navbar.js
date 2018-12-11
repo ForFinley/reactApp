@@ -1,15 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Dropdown from '../common/dropdown';
+import Dropdown from "../common/dropdown";
 import "./Navbar.scss";
 
-const Navbar = ({ isLoggedIn, logout, name }) => {
-
+const Navbar = ({ isLoggedIn, logout, email }) => {
   const dropdownItems = [
-    {type: 'router-link', to: '/profile', display: 'Profile'},
-    {type: 'router-link', to: '/settings', display: 'Settings'},
-    {type: 'click', display: 'Logout', onClick: logout}
-  ]
+    { type: "router-link", to: "/profile", display: "Profile" },
+    { type: "router-link", to: "/settings", display: "Settings" },
+    { type: "click", display: "Logout", onClick: logout }
+  ];
 
   return (
     <div className="Navbar">
@@ -35,10 +34,17 @@ const Navbar = ({ isLoggedIn, logout, name }) => {
       </ul>
 
       {isLoggedIn &&
-        name && <div className="Navbar__account-dropdown"><Dropdown items={dropdownItems} renderElement= {() => <div>Account</div>}/></div>}
+        email && (
+          <div className="Navbar__account-dropdown">
+            <Dropdown
+              items={dropdownItems}
+              renderElement={() => <div>Account</div>}
+            />
+          </div>
+        )}
 
-        {isLoggedIn &&
-          name && <div className="Navbar__greeting">Hello, {name}!</div>}
+      {isLoggedIn &&
+        email && <div className="Navbar__greeting">Hello, {email}!</div>}
     </div>
   );
 };

@@ -3,9 +3,7 @@ import { validateEmail } from "../../utils/validateEmail";
 export const signUpFormValidator = values => {
   const errors = {};
   let formIsValid = true;
-  const { username, email, password, confirmPassword } = values;
-
-  errors["username"] = !!username ? "" : "Username is required";
+  const { email, password, confirmPassword } = values;
 
   errors["email"] = !!email ? "" : "Email is required";
 

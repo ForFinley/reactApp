@@ -5,25 +5,24 @@ import Form from "../common/form";
 import FormGroup from "../common/form-group";
 import FullPage from "../common/containers/FullPage";
 import Button from "../common/button";
-import withFormValidation from '../hoc/withFormValidation';
+import withFormValidation from "../hoc/withFormValidation";
 import { loginFormValidator } from "./loginFormValidator";
 import "./Login.scss";
 
 class Login extends React.Component {
-
   submit = (e, loginFn) => {
     e.preventDefault();
     e.stopPropagation();
     this.props.runFormValidation(() => {
       if (this.props.formIsValid) {
-        const { username, password } = this.props.formValues;
-        loginFn({ username, password });
+        const { email, password } = this.props.formValues;
+        loginFn({ email, password });
       }
     }, true);
   };
 
   render() {
-    const { username, password } = this.props.formValues;
+    const { email, password } = this.props.formValues;
     const { touched, validationMessage, handleChange, handleBlur } = this.props;
     return (
       <AuthConsumer>
@@ -34,15 +33,15 @@ class Login extends React.Component {
 
               <FormGroup>
                 <Input
-                  label="Username"
-                  value={username}
+                  label="Email"
+                  value={email}
                   type="text"
-                  name="username"
+                  name="email"
                   onChange={handleChange}
-                  id="username"
+                  id="email"
                   onBlur={handleBlur}
-                  touched={touched.username}
-                  validationMessage={validationMessage.username}
+                  touched={touched.email}
+                  validationMessage={validationMessage.email}
                 />
               </FormGroup>
 
@@ -85,4 +84,8 @@ class Login extends React.Component {
   }
 }
 
-export default withFormValidation(Login, ['username', 'password'], loginFormValidator);
+export default withFormValidation(
+  Login,
+  ["email", "password"],
+  loginFormValidator
+);

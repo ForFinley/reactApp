@@ -6,19 +6,18 @@ import {
   getDecodedToken,
   destroyToken
 } from "../services/Storage";
-import { setAuthHeaders, removeAuthHeaders } from '../services/Headers';
+import { setAuthHeaders, removeAuthHeaders } from "../services/Headers";
 
 //creating a context to store login state information
 //could use redux for this, but context is fine
 const AuthContext = React.createContext();
 
 class AuthProvider extends React.Component {
-  state = { isLoggedIn: null, loginLoading: false, loginError: "", name: "" };
+  state = { isLoggedIn: null, loginLoading: false, loginError: "", email: "" };
 
   componentDidMount() {
     const token = getToken();
     if (token && this.validateToken()) {
-
       //user is already logged in -- found token in local storage
       //now login state will persist through browser refreshes
       this.handleSuccess(token);
@@ -27,13 +26,13 @@ class AuthProvider extends React.Component {
     }
   }
 
-  loginFromContext = (data) => {
+  loginFromContext = data => {
     //set loading to true, try to login
     this.setState({ loginLoading: true });
 
     //simulate http login
     login(data)
-      .then((res) => this.handleSuccess(res.data.token))
+      .then(res => this.handleSuccess(res.data.token))
       .catch(this.handleError);
   };
 
@@ -42,7 +41,7 @@ class AuthProvider extends React.Component {
     removeAuthHeaders();
     this.setState({
       isLoggedIn: false,
-      name: ""
+      email: ""
     });
   };
 
@@ -56,7 +55,7 @@ class AuthProvider extends React.Component {
     this.setState({
       loginLoading: false,
       isLoggedIn: true,
-      name: decoded.username,
+      email: decoded.email,
       loginError: ""
     });
   };
@@ -67,15 +66,15 @@ class AuthProvider extends React.Component {
     this.setState({
       loginLoading: false,
       isLoggedIn: false,
-      name: "",
-      loginError: 'An error occurred logging in'
+      email: "",
+      loginError: "An error occurred logging in"
     });
   };
 
   validateToken = () => {
     const token = getDecodedToken();
-    return (new Date().getTime()/1000) < token.exp;
-  }
+    return new Date().getTime() / 1000 < token.exp;
+  };
   render() {
     return (
       <AuthContext.Provider

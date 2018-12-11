@@ -4,7 +4,7 @@ import Form from "../common/form";
 import FormGroup from "../common/form-group";
 import FullPage from "../common/containers/FullPage";
 import Button from "../common/button";
-import withFormValidation from '../hoc/withFormValidation';
+import withFormValidation from "../hoc/withFormValidation";
 import { signUpFormValidator } from "./signUpFormValidator";
 import { signUp } from "../../services/AuthService";
 import { withRouter } from "react-router-dom";
@@ -26,8 +26,8 @@ class SignUp extends React.Component {
     this.props.runFormValidation(() => {
       if (this.props.formIsValid) {
         this.setState({ loading: true, error: false }, () => {
-          const { email, password, username } = this.props.formValues;
-          signUp({ username, email, password })
+          const { email, password } = this.props.formValues;
+          signUp({ email, password })
             .then(res => {
               this.setState({ loading: false });
 
@@ -43,32 +43,13 @@ class SignUp extends React.Component {
   };
 
   render() {
-    const {
-      username,
-      email,
-      password,
-      confirmPassword
-    } = this.props.formValues;
+    const { email, password, confirmPassword } = this.props.formValues;
     const { touched, validationMessage, handleBlur, handleChange } = this.props;
     const { error, loading } = this.state;
     return (
       <FullPage>
         <Form onSubmit={this.submit}>
           <h1 className="Form__heading">Sign Up</h1>
-
-          <FormGroup>
-            <Input
-              label="Username"
-              value={username}
-              type="text"
-              name="username"
-              onChange={handleChange}
-              id="username"
-              onBlur={handleBlur}
-              touched={touched.username}
-              validationMessage={validationMessage.username}
-            />
-          </FormGroup>
 
           <FormGroup>
             <Input
@@ -135,8 +116,8 @@ class SignUp extends React.Component {
   }
 }
 
-export default withRouter(
-  withFormValidation(
-    SignUp, ['username', 'email', 'password', 'confirmPassword'], signUpFormValidator
-  )
+export default withFormValidation(
+  withRouter(SignUp),
+  ["email", "password", "confirmPassword"],
+  signUpFormValidator
 );
