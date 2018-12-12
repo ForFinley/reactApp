@@ -4,6 +4,7 @@ import Form from "../common/form";
 import FormGroup from "../common/form-group";
 import FullPage from "../common/containers/FullPage";
 import Button from "../common/button";
+import { Link } from 'react-router-dom';
 import withFormValidation from "../hoc/withFormValidation";
 import { signUpFormValidator } from "./signUpFormValidator";
 import { signUp } from "../../services/AuthService";
@@ -93,12 +94,6 @@ class SignUp extends React.Component {
             />
           </FormGroup>
 
-          {!loading && (
-            <FormGroup>
-              <Button type="submit">Sign Up</Button>
-            </FormGroup>
-          )}
-
           {loading && (
             <FormGroup>
               <div className="Form__loading-text">Signing Up...</div>
@@ -110,6 +105,16 @@ class SignUp extends React.Component {
                 <div className="Form__error-text">{error}</div>
               </FormGroup>
             )}
+
+          {!loading && (
+            <FormGroup>
+              <Button type="submit">Sign Up</Button>
+            </FormGroup>
+          )}
+
+          <div className="mb10 font-s">
+            Already have an account? <Link to="/login" className="link">Login</Link>
+          </div>
         </Form>
       </FullPage>
     );

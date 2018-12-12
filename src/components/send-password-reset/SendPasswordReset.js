@@ -6,10 +6,9 @@ import Form from "../common/form";
 import FormGroup from "../common/form-group";
 import Button from "../common/button";
 import withFormValidation from '../hoc/withFormValidation';
-import { resetPasswordFormValidator } from './resetPasswordFormValidator';
+import { sendPasswordResetFormValidator } from './sendPasswordResetFormValidator';
 import { sendRecoveryEmail } from "../../services/AuthService";
-import { withRouter } from "react-router-dom";
-import "./ResetPassword.scss";
+import "./SendPasswordReset.scss";
 
 class SendPasswordReset extends React.Component {
   state = {
@@ -23,11 +22,10 @@ class SendPasswordReset extends React.Component {
     this.props.runFormValidation(() => {
       if (this.props.formIsValid) {
         const { email } = this.props.formValues;
-        const hash = this.props.match.params.hash;
         this.setState({ loading: true, error: false }, () => {
           sendRecoveryEmail({ email })
             .then(res => {
-              addMessage({ type: "success", message: "Recovery email sent! Check your email..." });
+              addMessage({ type: "success", message: "Recovery email sent! Please check your email..." });
             })
             .catch(err => {
               this.setState({
@@ -58,7 +56,7 @@ class SendPasswordReset extends React.Component {
               <FormGroup>
                 <Input
                   label="Email"
-                  value={newPassword}
+                  value={email}
                   type="email"
                   name="email"
                   onChange={handleChange}
@@ -94,4 +92,4 @@ class SendPasswordReset extends React.Component {
   }
 }
 
-export default withFormValidation(SendPasswordReset, ['email'], resetPasswordFormValidator);
+export default withFormValidation(SendPasswordReset, ['email'], sendPasswordResetFormValidator);

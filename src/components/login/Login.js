@@ -60,19 +60,6 @@ class Login extends React.Component {
                 />
               </FormGroup>
 
-              {!loginLoading && (
-                <FormGroup>
-                  <Button type="submit">Login</Button>
-                </FormGroup>
-              )}
-
-              <div>
-                <Link to="/sendRecoveryEmail">Forgot Password?</Link>
-              </div>
-              <div>
-                Don't have an account? <Link to="/signup">Sign Up</Link>
-              </div>
-
               {loginLoading && (
                 <FormGroup>
                   <div className="Form__loading-text">Logging In...</div>
@@ -84,6 +71,20 @@ class Login extends React.Component {
                     <div className="Form__error-text">{loginError}</div>
                   </FormGroup>
                 )}
+
+              {!loginLoading && (
+                <FormGroup>
+                  <Button type="submit">Login</Button>
+                </FormGroup>
+              )}
+
+              <div className="mb10 font-s">
+                Forgot password? <Link className="link" to="/sendRecoveryEmail">Click here</Link>
+
+              </div>
+              <div className="font-s">
+                Don't have an account? <Link to="/signup" className="link">Sign Up</Link>
+              </div>
             </Form>
           </FullPage>
         )}
