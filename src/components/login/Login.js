@@ -7,6 +7,7 @@ import FullPage from "../common/containers/FullPage";
 import Button from "../common/button";
 import withFormValidation from "../hoc/withFormValidation";
 import { loginFormValidator } from "./loginFormValidator";
+import { Link } from 'react-router-dom';
 import "./Login.scss";
 
 class Login extends React.Component {
@@ -64,6 +65,13 @@ class Login extends React.Component {
                   <Button type="submit">Login</Button>
                 </FormGroup>
               )}
+
+              <div>
+                <Link to="/sendRecoveryEmail">Forgot Password?</Link>
+              </div>
+              <div>
+                Don't have an account? <Link to="/signup">Sign Up</Link>
+              </div>
 
               {loginLoading && (
                 <FormGroup>
