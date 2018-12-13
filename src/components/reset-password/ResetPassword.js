@@ -23,9 +23,9 @@ class ResetPassword extends React.Component {
     this.props.runFormValidation(() => {
       if (this.props.formIsValid) {
         const { newPassword } = this.props.formValues;
-        const hash = this.props.match.params.hash;
+        const passwordResetHash = this.props.match.params.hash;
         this.setState({ loading: true, error: false }, () => {
-          resetPassword({ newPassword, hash })
+          resetPassword({ password: newPassword, passwordResetHash })
             .then(res => {
               addMessage({ type: "success", message: "Password reset success!" });
               this.props.history.push("/login");
@@ -109,4 +109,4 @@ class ResetPassword extends React.Component {
   }
 }
 
-export default withRouter(withFormValidation(ResetPassword, ['newPassword', 'confirmNewPassword'], resetPasswordFormValidator));
+export default withFormValidation(withRouter(ResetPassword), ['newPassword', 'confirmNewPassword'], resetPasswordFormValidator);

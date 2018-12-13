@@ -20,7 +20,7 @@ export const verifyEmail = hash =>
   axios.get(`${BASE_URL}/userService/verifyEmail/${hash}`);
 
 export const resetPassword = data =>
-  axios.post(`${BASE_URL}/userService/resetPassword`, data, { headers });
+  axios.post(`${BASE_URL}/userService/passwordResetConfirm`, data, { headers });
 
 export const sendRecoveryEmail = data =>
-  axios.post(`${BASE_URL}/userService/passwordResetInit`)
+  axios.post(`${BASE_URL}/userService/passwordResetInit`, data, { headers })
