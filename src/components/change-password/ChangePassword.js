@@ -1,44 +1,53 @@
-import React from 'react';
-import FormGroup from '../common/form-group';
-import Input from '../common/input';
-import Button from '../common/button'
-import { changePassword } from '../../services/AuthService';
-import withFormValidation from '../hoc/withFormValidation';
-import { changePasswordFormValidator } from './changePasswordFormValidator';
-import { FlashMessagesConsumer } from '../../context/FlashMessages';
-import './ChangePassword.scss';
+import React from "react";
+import FormGroup from "../common/form-group";
+import Input from "../common/input";
+import Button from "../common/button";
+import { changePassword } from "../../services/AuthService";
+import withFormValidation from "../hoc/withFormValidation";
+import { changePasswordFormValidator } from "./changePasswordFormValidator";
+import { FlashMessagesConsumer } from "../../context/FlashMessages";
+import "./ChangePassword.scss";
 
 class ChangePassword extends React.Component {
-
   state = {
     loading: false,
-    error: ''
-  }
+    error: ""
+  };
 
   submit = (e, addMessage) => {
     e.preventDefault();
     e.stopPropagation();
     this.props.runFormValidation(() => {
       if (this.props.formIsValid) {
-        this.setState({loading: true, error: ''}, () => {
+        this.setState({ loading: true, error: "" }, () => {
           const { password, newPassword } = this.props.formValues;
-          changePassword({ password, newPassword, username: this.props.username })
+          changePassword({ password, newPassword })
             .then(res => {
-              this.setState({loading: false, successMessage: 'Password changed successfully!'}, () => {
-                addMessage({type: 'success', message: 'Password changed successfully!'});
-                this.props.resetForm();
-              })
+              this.setState(
+                {
+                  loading: false,
+                  successMessage: "Password changed successfully!"
+                },
+                () => {
+                  addMessage({
+                    type: "success",
+                    message: "Password changed successfully!"
+                  });
+                  this.props.resetForm();
+                }
+              );
             })
             .catch(err => {
-              this.setState({loading: false}, () => {
-                addMessage({type: 'danger', message: 'An error occurred changing your password'})
-              })
-            })
-        })
+              this.setState({ loading: false }, () => {
+                addMessage({
+                  type: "danger",
+                  message: "An error occurred changing your password"
+                });
+              });
+            });
+        });
       }
-    }, true)
-
-
+    }, true);
   };
 
   render() {
@@ -51,22 +60,52 @@ class ChangePassword extends React.Component {
         <h3>Change Password</h3>
 
         <FormGroup>
-          <Input label="Current Password" value={password} type="password" name="password" onChange={handleChange} id="password" onBlur={handleBlur} touched={touched.password} validationMessage={validationMessage.password} />
+          <Input
+            label="Current Password"
+            value={password}
+            type="password"
+            name="password"
+            onChange={handleChange}
+            id="password"
+            onBlur={handleBlur}
+            touched={touched.password}
+            validationMessage={validationMessage.password}
+          />
         </FormGroup>
 
         <FormGroup>
-          <Input label="New Password" value={newPassword} type="password" name="newPassword" onChange={handleChange} id="newPassword" onBlur={handleBlur} touched={touched.newPassword} validationMessage={validationMessage.newPassword} />
+          <Input
+            label="New Password"
+            value={newPassword}
+            type="password"
+            name="newPassword"
+            onChange={handleChange}
+            id="newPassword"
+            onBlur={handleBlur}
+            touched={touched.newPassword}
+            validationMessage={validationMessage.newPassword}
+          />
         </FormGroup>
 
         <FormGroup>
-          <Input label="Confirm New Password" value={confirmNewPassword} type="password" name="confirmNewPassword" onChange={handleChange} id="confirmNewPassword" onBlur={handleBlur} touched={touched.confirmNewPassword} validationMessage={validationMessage.confirmNewPassword} />
+          <Input
+            label="Confirm New Password"
+            value={confirmNewPassword}
+            type="password"
+            name="confirmNewPassword"
+            onChange={handleChange}
+            id="confirmNewPassword"
+            onBlur={handleBlur}
+            touched={touched.confirmNewPassword}
+            validationMessage={validationMessage.confirmNewPassword}
+          />
         </FormGroup>
 
         {!loading && (
           <FlashMessagesConsumer>
-            {({addMessage}) => (
+            {({ addMessage }) => (
               <FormGroup>
-                <Button onClick={ e => this.submit(e, addMessage)}>
+                <Button onClick={e => this.submit(e, addMessage)}>
                   Submit
                 </Button>
               </FormGroup>
@@ -86,9 +125,12 @@ class ChangePassword extends React.Component {
             </FormGroup>
           )}
       </div>
-    )
+    );
   }
-
 }
 
-export default withFormValidation(ChangePassword, ['password', 'newPassword', 'confirmNewPassword'], changePasswordFormValidator);
+export default withFormValidation(
+  ChangePassword,
+  ["password", "newPassword", "confirmNewPassword"],
+  changePasswordFormValidator
+);

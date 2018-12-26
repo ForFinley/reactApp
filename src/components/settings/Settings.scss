@@ -1,5 +1,15 @@
-@import '../../sass/variables';
+@import "../../sass/variables";
 
 .Settings {
-  
+  &__sidebar {
+    display: inline-block;
+    width: 30%;
+    vertical-align: top;
+  }
+
+  &__content {
+    display: inline-block;
+    width: 70%;
+    vertical-align: top;
+  }
 }

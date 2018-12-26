@@ -8,7 +8,7 @@ import Profile from "./components/profile/Profile";
 import Settings from "./components/settings/Settings";
 import Navbar from "./components/navbar/Navbar";
 import Verify from "./components/verify/Verify";
-import SendPasswordReset from './components/send-password-reset/SendPasswordReset';
+import SendPasswordReset from "./components/send-password-reset/SendPasswordReset";
 import ResetPassword from "./components/reset-password/ResetPassword";
 import FlashMessageContainer from "./components/flash-messages/FlashMessageContainer";
 import { AuthConsumer } from "./context/Auth";
@@ -38,11 +38,7 @@ class App extends React.Component {
             />
             <Route exact path="/home" component={mustBeLoggedIn(Home)} />
             <Route exact path="/profile" component={mustBeLoggedIn(Profile)} />
-            <Route
-              exact
-              path="/settings"
-              component={mustBeLoggedIn(Settings)}
-            />
+            <Route path="/settings" component={mustBeLoggedIn(Settings)} />
             <Route exact path="/login" component={mustBeLoggedOut(Login)} />
             <Route exact path="/signup" component={mustBeLoggedOut(SignUp)} />
           </div>
