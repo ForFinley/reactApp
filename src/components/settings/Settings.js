@@ -9,7 +9,19 @@ import "./Settings.scss";
 
 class Settings extends React.Component {
   state = {
-    userProfile: {}
+    userProfile: {},
+    links: [
+      {
+        icon: <i className="fas fa-unlock-alt" />,
+        text: "Password",
+        path: `${this.props.match.url}/password`
+      },
+      {
+        icon: <i className="far fa-credit-card" />,
+        text: "Payment",
+        path: `${this.props.match.url}/payment`
+      }
+    ]
   };
 
   componentDidMount() {
@@ -22,14 +34,14 @@ class Settings extends React.Component {
 
   render() {
     const { match } = this.props;
-    console.log(match);
+    const { links } = this.state;
     return (
       <FullPage className="Settings">
         <Container>
           <h1>Settings</h1>
           <div>
             <div className="Settings__sidebar">
-              <LinkList />
+              <LinkList links={links} />
             </div>
 
             <div className="Settings__content">

@@ -1,0 +1,3 @@
+export default {
+  REACT_APP_STRIPE_PUBLISHABLE_KEY: process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY
+};

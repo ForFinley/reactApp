@@ -6,12 +6,13 @@ class LinkList extends React.Component {
   render() {
     return (
       <div className="LinkList">
-        <NavLink className="LinkList__link" to="/settings/password">
-          <i class="fas fa-unlock-alt" /> Password
-        </NavLink>
-        <NavLink className="LinkList__link" to="/settings/payment">
-          <i class="far fa-credit-card" /> Payment
-        </NavLink>
+        {this.props.links &&
+          this.props.links.length > 0 &&
+          this.props.links.map(l => (
+            <NavLink className="LinkList__link" to={l.path}>
+              {l.icon ? l.icon : ""} {l.text}
+            </NavLink>
+          ))}
       </div>
     );
   }
