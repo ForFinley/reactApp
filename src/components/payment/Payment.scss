@@ -1,0 +1,20 @@
+@import "../../sass/variables";
+
+.Payment {
+  padding: 20px;
+  max-width: 400px;
+
+  &__message-container {
+    padding: 10px 0;
+  }
+
+  .error {
+    color: $color-error;
+    font-size: 12px;
+  }
+
+  .success {
+    color: $color-primary;
+    font-size: 12px;
+  }
+}

@@ -11,22 +11,6 @@
     overflow: hidden;
     transition: padding 0.25s;
 
-    &::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 100%;
-      transform: translateX(-100%);
-      background-image: linear-gradient(
-        to right,
-        lighten($color-primary, 10),
-        lighten($color-secondary, 10)
-      );
-      transition: all 0.25s;
-      z-index: -1;
-    }
     &:hover {
       padding-left: 20px;
     }

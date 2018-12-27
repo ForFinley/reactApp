@@ -4,6 +4,8 @@ import FullPage from "../common/containers/FullPage";
 import Container from "../common/containers/Container";
 import { getProfile } from "../../services/AuthService";
 import ChangePassword from "../change-password/ChangePassword";
+import Payment from "../payment/Payment";
+import { Elements } from "react-stripe-elements";
 import LinkList from "../common/link-list/LinkList";
 import "./Settings.scss";
 
@@ -56,7 +58,11 @@ class Settings extends React.Component {
               />
               <Route
                 path={`${match.path}/payment`}
-                component={() => <div>Payment</div>}
+                render={() => (
+                  <Elements>
+                    <Payment />
+                  </Elements>
+                )}
               />
             </div>
           </div>
