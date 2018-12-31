@@ -1,0 +1,8 @@
+@import "../../../sass/variables";
+
+.Card {
+  padding: 10px;
+  box-shadow: 0 3px 10px $color-grey;
+  border-radius: 3px;
+  border: 1px solid $color-primary;
+}

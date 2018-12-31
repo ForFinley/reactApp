@@ -1,5 +1,5 @@
 import React from "react";
-import { login } from "../services/AuthService";
+import { login, getProfile } from "../services/AuthService";
 import {
   setToken,
   getToken,
@@ -13,7 +13,13 @@ import { setAuthHeaders, removeAuthHeaders } from "../services/Headers";
 const AuthContext = React.createContext();
 
 class AuthProvider extends React.Component {
-  state = { isLoggedIn: null, loginLoading: false, loginError: "", email: "" };
+  state = {
+    isLoggedIn: null,
+    loginLoading: false,
+    loginError: "",
+    email: "",
+    profile: {}
+  };
 
   componentDidMount() {
     const token = getToken();
@@ -41,24 +47,42 @@ class AuthProvider extends React.Component {
     removeAuthHeaders();
     this.setState({
       isLoggedIn: false,
-      email: ""
+      email: "",
+      profile: {}
     });
   };
 
-  handleSuccess = token => {
+  handleSuccess = async token => {
     //save token to localStorage
     setToken(token);
     setAuthHeaders(token);
     const decoded = getDecodedToken();
 
-    //set context state
-    this.setState({
-      loginLoading: false,
-      isLoggedIn: true,
-      email: decoded.email,
-      loginError: ""
+    getProfile().then(res => {
+      this.setState({
+        loginLoading: false,
+        isLoggedIn: true,
+        email: decoded.email,
+        loginError: "",
+        profile: res.data
+      });
     });
+    //set context state
   };
+
+  updateProfile = () =>
+    new Promise((resolve, reject) => {
+      getProfile()
+        .then(res => {
+          this.setState(
+            {
+              profile: res.data
+            },
+            resolve
+          );
+        })
+        .catch(reject);
+    });
 
   handleError = e => {
     destroyToken();
@@ -81,6 +105,7 @@ class AuthProvider extends React.Component {
         value={{
           login: this.loginFromContext,
           logout: this.logoutFromContext,
+          updateProfile: this.updateProfile,
           ...this.state
         }}
       >

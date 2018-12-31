@@ -1,0 +1,24 @@
+@import "../../sass/variables";
+
+.PaymentCard {
+  display: flex;
+  justify-content: space-between;
+  &__image {
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__info {
+  }
+
+  &__delete {
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $color-error;
+    cursor: pointer;
+  }
+}
