@@ -14,10 +14,9 @@ const AuthContext = React.createContext();
 
 class AuthProvider extends React.Component {
   state = {
-    isLoggedIn: null,
     loginLoading: false,
+    profileLoading: false,
     loginError: "",
-    email: "",
     profile: {}
   };
 
@@ -26,72 +25,80 @@ class AuthProvider extends React.Component {
     if (token && this.validateToken()) {
       //user is already logged in -- found token in local storage
       //now login state will persist through browser refreshes
-      this.handleSuccess(token);
+      this.loginFromContext(null, token);
     } else {
       this.logoutFromContext();
     }
   }
 
-  loginFromContext = data => {
+  loginFromContext = async (params, token) => {
     //set loading to true, try to login
     this.setState({ loginLoading: true });
+    try {
+      if (!token) {
+        //login to receive token
+        const { data } = await login(params);
+        token = data.token;
+      }
 
-    //simulate http login
-    login(data)
-      .then(res => this.handleSuccess(res.data.token))
-      .catch(this.handleError);
+      //handle the token once we receive it
+      this.handleToken(token);
+
+      //get fresh profile information and update on state
+      await this.updateProfile();
+
+      //cleanup state
+      this.setState({
+        loginLoading: false,
+        loginError: ""
+      });
+    } catch (e) {
+      this.handleError(e);
+    }
   };
 
   logoutFromContext = () => {
     destroyToken();
     removeAuthHeaders();
     this.setState({
-      isLoggedIn: false,
-      email: "",
+      loginError: "",
+      loginLoading: false,
       profile: {}
     });
   };
 
-  handleSuccess = async token => {
-    //save token to localStorage
+  handleToken = token => {
     setToken(token);
     setAuthHeaders(token);
-    const decoded = getDecodedToken();
-
-    getProfile().then(res => {
-      this.setState({
-        loginLoading: false,
-        isLoggedIn: true,
-        email: decoded.email,
-        loginError: "",
-        profile: res.data
-      });
-    });
-    //set context state
   };
 
   updateProfile = () =>
     new Promise((resolve, reject) => {
+      this.setState({ profileLoading: true });
       getProfile()
         .then(res => {
           this.setState(
             {
               profile: res.data
             },
-            resolve
+            () => {
+              this.setState({ profileLoading: false }, resolve);
+            }
           );
         })
-        .catch(reject);
+        .catch(() => {
+          this.setState({ profileLoading: false }, reject);
+        });
     });
 
   handleError = e => {
+    console.error(e);
     destroyToken();
     removeAuthHeaders();
     this.setState({
       loginLoading: false,
-      isLoggedIn: false,
-      email: "",
-      loginError: "An error occurred logging in"
+      loginError: "An error occurred logging in",
+      profile: {}
     });
   };
 
@@ -106,6 +113,7 @@ class AuthProvider extends React.Component {
           login: this.loginFromContext,
           logout: this.logoutFromContext,
           updateProfile: this.updateProfile,
+          isLoggedIn: Object.keys(this.state.profile).length > 0,
           ...this.state
         }}
       >

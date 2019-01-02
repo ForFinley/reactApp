@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Dropdown from "../common/dropdown";
 import "./Navbar.scss";
 
-const Navbar = ({ isLoggedIn, logout, email }) => {
+const Navbar = ({ isLoggedIn, logout, profile }) => {
   const dropdownItems = [
     { type: "router-link", to: "/profile", display: "Profile" },
     { type: "router-link", to: "/settings", display: "Settings" },
@@ -34,7 +34,7 @@ const Navbar = ({ isLoggedIn, logout, email }) => {
       </ul>
 
       {isLoggedIn &&
-        email && (
+        profile.email && (
           <div className="Navbar__account-dropdown">
             <Dropdown
               items={dropdownItems}
@@ -44,7 +44,9 @@ const Navbar = ({ isLoggedIn, logout, email }) => {
         )}
 
       {isLoggedIn &&
-        email && <div className="Navbar__greeting">Hello, {email}!</div>}
+        profile.email && (
+          <div className="Navbar__greeting">Hello, {profile.email}!</div>
+        )}
     </div>
   );
 };
