@@ -4,6 +4,7 @@ import Button from "../common/button";
 import { AuthConsumer } from "../../context/Auth";
 import { setBillingCard } from "../../services/PaymentService";
 import PaymentCard from "./PaymentCard";
+import Loader from "../loader/Loader";
 import "./Payment.scss";
 
 class Payment extends React.Component {
@@ -40,38 +41,42 @@ class Payment extends React.Component {
           return (
             <div className="Payment">
               <h3>Payment Method</h3>
-              {!stripeBillingCardBrand && (
-                <form>
-                  <CardElement
-                    style={{
-                      base: {
-                        lineHeight: "40px",
-                        "::placeholder": {
-                          color: "#CFD7E0"
+              {!stripeBillingCardBrand &&
+                !loading && (
+                  <form>
+                    <CardElement
+                      style={{
+                        base: {
+                          lineHeight: "40px",
+                          "::placeholder": {
+                            color: "#CFD7E0"
+                          }
                         }
-                      }
-                    }}
+                      }}
+                    />
+                    <div className="Payment__message-container">
+                      {!loading &&
+                        error && <div className="error">{error}</div>}
+                      {loading && <div className="error">{error}</div>}
+                    </div>
+                    <Button
+                      type="button"
+                      onClick={e => this.submit(e, updateProfile)}
+                    >
+                      Add Card
+                    </Button>
+                  </form>
+                )}
+              {stripeBillingCardBrand &&
+                !loading && (
+                  <PaymentCard
+                    brand={stripeBillingCardBrand}
+                    expYear={stripeBillingCardExpYear}
+                    expMonth={stripeBillingCardExpMonth}
+                    last4={stripeBillingCardLast4}
                   />
-                  <div className="Payment__message-container">
-                    {!loading && error && <div className="error">{error}</div>}
-                    {loading && <div className="error">{error}</div>}
-                  </div>
-                  <Button
-                    type="button"
-                    onClick={e => this.submit(e, updateProfile)}
-                  >
-                    Add Card
-                  </Button>
-                </form>
-              )}
-              {stripeBillingCardBrand && (
-                <PaymentCard
-                  brand={stripeBillingCardBrand}
-                  expYear={stripeBillingCardExpYear}
-                  expMonth={stripeBillingCardExpMonth}
-                  last4={stripeBillingCardLast4}
-                />
-              )}
+                )}
+              {loading && <Loader />}
             </div>
           );
         }}

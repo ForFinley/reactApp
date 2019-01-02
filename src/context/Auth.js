@@ -14,6 +14,7 @@ const AuthContext = React.createContext();
 
 class AuthProvider extends React.Component {
   state = {
+    isLoggedIn: null,
     loginLoading: false,
     profileLoading: false,
     loginError: "",
@@ -50,7 +51,8 @@ class AuthProvider extends React.Component {
       //cleanup state
       this.setState({
         loginLoading: false,
-        loginError: ""
+        loginError: "",
+        isLoggedIn: true
       });
     } catch (e) {
       this.handleError(e);
@@ -63,7 +65,8 @@ class AuthProvider extends React.Component {
     this.setState({
       loginError: "",
       loginLoading: false,
-      profile: {}
+      profile: {},
+      isLoggedIn: false
     });
   };
 
@@ -98,7 +101,8 @@ class AuthProvider extends React.Component {
     this.setState({
       loginLoading: false,
       loginError: "An error occurred logging in",
-      profile: {}
+      profile: {},
+      isLoggedIn: false
     });
   };
 
@@ -113,7 +117,6 @@ class AuthProvider extends React.Component {
           login: this.loginFromContext,
           logout: this.logoutFromContext,
           updateProfile: this.updateProfile,
-          isLoggedIn: Object.keys(this.state.profile).length > 0,
           ...this.state
         }}
       >
