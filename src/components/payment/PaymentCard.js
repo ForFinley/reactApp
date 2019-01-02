@@ -11,7 +11,7 @@ const getCardIcon = brand => {
       return null;
   }
 };
-const PaymentCard = ({ brand, expMonth, expYear, last4 }) => {
+const PaymentCard = ({ brand, expMonth, expYear, last4, onDelete }) => {
   return (
     <Card className="PaymentCard">
       <div className="PaymentCard__image">{getCardIcon(brand)}</div>
@@ -29,7 +29,7 @@ const PaymentCard = ({ brand, expMonth, expYear, last4 }) => {
         </div>
       </div>
 
-      <div className="PaymentCard__delete">
+      <div onClick={onDelete} className="PaymentCard__delete">
         <i class="far fa-trash-alt" />
       </div>
     </Card>
