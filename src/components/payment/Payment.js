@@ -41,32 +41,30 @@ class Payment extends React.Component {
           return (
             <div className="Payment">
               <h3>Payment Method</h3>
-              {!stripeBillingCardBrand &&
-                !loading && (
-                  <form>
-                    <CardElement
-                      style={{
-                        base: {
-                          lineHeight: "40px",
-                          "::placeholder": {
-                            color: "#CFD7E0"
-                          }
+              {!stripeBillingCardBrand && (
+                <form>
+                  <CardElement
+                    style={{
+                      base: {
+                        lineHeight: "40px",
+                        "::placeholder": {
+                          color: "#CFD7E0"
                         }
-                      }}
-                    />
-                    <div className="Payment__message-container">
-                      {!loading &&
-                        error && <div className="error">{error}</div>}
-                      {loading && <div className="error">{error}</div>}
-                    </div>
-                    <Button
-                      type="button"
-                      onClick={e => this.submit(e, updateProfile)}
-                    >
-                      Add Card
-                    </Button>
-                  </form>
-                )}
+                      }
+                    }}
+                  />
+                  <div className="Payment__message-container">
+                    {!loading && error && <div className="error">{error}</div>}
+                    {loading && <div className="error">{error}</div>}
+                  </div>
+                  <Button
+                    type="button"
+                    onClick={e => this.submit(e, updateProfile)}
+                  >
+                    Add Card
+                  </Button>
+                </form>
+              )}
               {stripeBillingCardBrand &&
                 !loading && (
                   <PaymentCard
