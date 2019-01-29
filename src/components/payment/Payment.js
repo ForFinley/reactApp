@@ -5,6 +5,8 @@ import { AuthConsumer } from "../../context/Auth";
 import { FlashMessagesConsumer } from "../../context/FlashMessages";
 import FormGroup from "../common/form-group";
 import Input from "../common/input";
+import withFormValidation from "../hoc/withFormValidation";
+import { paymentFormValidator } from "./paymentFormValidator";
 import {
   setBillingCard,
   deleteBillingCard
@@ -24,12 +26,6 @@ const formItems = [
 
 class Payment extends React.Component {
   state = {
-    line1: "",
-    line2: "",
-    city: "",
-    state: "",
-    country: "",
-    postalCode: "",
     loading: false,
     error: ""
   };
@@ -48,40 +44,35 @@ class Payment extends React.Component {
       return;
     }
 
-    this.setState({ loading: true });
+    this.props.runFormValidation(async () => {
+      if (this.props.formIsValid) {
+        this.setState({ loading: true });
 
-    const { line1, line2, city, state, county, postalCode } = this.state;
-    const requestBody = {
-      token: token.id,
-      line1,
-      line2,
-      city,
-      state,
-      county,
-      postalCode
-    };
+        const { formValues } = this.props;
+        const requestBody = {
+          token: token.id,
+          ...formValues
+        };
 
-    try {
-      await setBillingCard(requestBody);
-      await updateProfileFunction();
-      addMessageFunction({
-        type: "success",
-        message: "Card added"
-      });
-      this.setState({ loading: false });
-    } catch (updateError) {
-      this.setState({ error: updateError.message, loading: false });
-      addMessageFunction({
-        type: "danger",
-        message: "An issue occurred adding this credit card"
-      });
-      return;
-    }
+        try {
+          await setBillingCard(requestBody);
+          await updateProfileFunction();
+          addMessageFunction({
+            type: "success",
+            message: "Card added"
+          });
+          this.setState({ loading: false });
+        } catch (updateError) {
+          this.setState({ error: updateError.message, loading: false });
+          addMessageFunction({
+            type: "danger",
+            message: "An issue occurred adding this credit card"
+          });
+          return;
+        }
+      }
+    }, true);
   }
-
-  handleChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
 
   async deleteCard(updateProfileFunction, addMessageFunction) {
     this.setState({ loading: true });
@@ -100,6 +91,8 @@ class Payment extends React.Component {
 
   render() {
     const { error, loading } = this.state;
+    const { touched, validationMessage, handleBlur, handleChange } = this.props;
+
     return (
       <AuthConsumer>
         {({ profile, updateProfile }) => {
@@ -117,16 +110,18 @@ class Payment extends React.Component {
                   {!stripeBillingCardBrand &&
                     !loading && (
                       <form>
-                        {formItems.map(f => (
+                        {formItems.map(({ name, display }) => (
                           <FormGroup style={{ marginBottom: 20 }}>
-                            {" "}
                             <Input
-                              label={f.display}
-                              value={this.state[f.name]}
+                              label={display}
+                              value={this.props.formValues[name]}
                               type="text"
-                              name={f.name}
-                              onChange={this.handleChange}
-                              id={f.name}
+                              name={name}
+                              onChange={handleChange}
+                              id={name}
+                              onBlur={handleBlur}
+                              touched={touched[name]}
+                              validationMessage={validationMessage[name]}
                             />
                           </FormGroup>
                         ))}
@@ -181,4 +176,8 @@ class Payment extends React.Component {
   }
 }
 
-export default injectStripe(Payment);
+export default withFormValidation(
+  injectStripe(Payment),
+  formItems.map(i => i.name),
+  paymentFormValidator
+);
