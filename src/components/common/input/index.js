@@ -11,7 +11,8 @@ const Input = ({
   onChange,
   validationMessage,
   touched,
-  onBlur
+  onBlur,
+  style
 }) => (
   <>
     <input
@@ -25,6 +26,7 @@ const Input = ({
       placeholder={placeholder}
       onChange={onChange}
       onBlur={onBlur}
+      style={style}
     />
     <label className="Input__label" htmlFor="email">
       {label}
