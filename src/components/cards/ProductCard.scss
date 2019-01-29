@@ -1,0 +1,49 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+
+.ProductCard {
+  display: inline-block;
+  margin: 30px;
+  min-height: 250px;
+  padding: 10px;
+  width: 300px;
+  text-align: center;
+  padding: 30px;
+  border: 1px solid $color-grey;
+  border-radius: 3px;
+  vertical-align: top;
+  transition: all 0.2s;
+
+  &:hover {
+    transform: translateY(-20px);
+  }
+
+  &__title {
+    margin: 20px 0;
+    font-size: 20px;
+  }
+
+  p {
+    color: darken($color-grey, 30);
+  }
+
+  &__description {
+    margin-bottom: 20px;
+  }
+
+  @media screen and (max-width: $break-small) {
+    width: calc(100% - 50px);
+  }
+
+  @media screen and (min-width: $break-small) and (max-width: $break-medium) {
+    width: calc(100% - 50px);
+  }
+
+  @media screen and (min-width: $break-medium) and (max-width: $break-large) {
+    width: calc(33% - 60px);
+  }
+
+  @media screen and (min-width: $break-large) {
+    width: calc(25% - 80px);
+  }
+}

@@ -1,7 +1,7 @@
 export const paymentFormValidator = values => {
   const errors = {};
   let formIsValid = true;
-  const { line1, line2, city, state, postalCode, country } = values;
+  const { line1, city, state, postalCode, country } = values;
 
   errors["line1"] = !!line1 ? "" : "Address Line 1 is required";
   errors["city"] = !!city ? "" : "City is required";

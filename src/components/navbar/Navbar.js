@@ -14,13 +14,9 @@ const Navbar = ({ isLoggedIn, logout, profile }) => {
     <div className="Navbar">
       <ul className="Navbar__links">
         <li className="Navbar__links-link">
-          <Link to="/">Public</Link>
+          <Link to="/">Home</Link>
         </li>
-        {isLoggedIn && (
-          <li className="Navbar__links-link">
-            <Link to="/home">Home</Link>
-          </li>
-        )}
+
         {!isLoggedIn && (
           <li className="Navbar__links-link">
             <Link to="/login">Login</Link>

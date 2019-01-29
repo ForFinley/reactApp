@@ -4,6 +4,13 @@
 .Public {
   position: relative;
   min-height: calc(100vh - #{$navbar-height});
+  max-width: 1200px;
+  margin: 0 auto;
+
+  &__callout {
+    text-align: center;
+    margin-top: 50px;
+  }
 
   &__heading {
     font-weight: 300;
