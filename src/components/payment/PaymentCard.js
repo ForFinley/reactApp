@@ -11,7 +11,7 @@ const getCardIcon = brand => {
       return null;
   }
 };
-const PaymentCard = ({ brand, expMonth, expYear, last4, onDelete }) => {
+const PaymentCard = ({ brand, exp, last4, onDelete }) => {
   return (
     <Card className="PaymentCard">
       <div className="PaymentCard__image">{getCardIcon(brand)}</div>
@@ -25,7 +25,7 @@ const PaymentCard = ({ brand, expMonth, expYear, last4, onDelete }) => {
         <div>
           {" "}
           <b>Expires:</b>
-          &nbsp; {expMonth}/{expYear}
+          &nbsp; {exp}
         </div>
       </div>
 

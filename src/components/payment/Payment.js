@@ -99,8 +99,7 @@ class Payment extends React.Component {
           const {
             stripeBillingCardBrand,
             stripeBillingCardLast4,
-            stripeBillingCardExpMonth,
-            stripeBillingCardExpYear
+            stripeBillingCardExp
           } = profile;
           return (
             <FlashMessagesConsumer>
@@ -155,8 +154,7 @@ class Payment extends React.Component {
                     !loading && (
                       <PaymentCard
                         brand={stripeBillingCardBrand}
-                        expYear={stripeBillingCardExpYear}
-                        expMonth={stripeBillingCardExpMonth}
+                        exp={stripeBillingCardExp}
                         last4={stripeBillingCardLast4}
                         onDelete={this.deleteCard.bind(
                           this,
