@@ -21,3 +21,9 @@ export const resetPassword = data =>
 
 export const sendRecoveryEmail = data =>
   axios.post(`${BASE_URL}/userService/passwordResetInit`, data);
+
+export const changeEmail = data =>
+  axios.post(`${BASE_URL}/userService/changeEmailConfirm`, data);
+
+export const changeEmailInit = () =>
+  axios.post(`${BASE_URL}/userService/changeEmailInit`);

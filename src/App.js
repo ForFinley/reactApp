@@ -9,6 +9,7 @@ import Navbar from "./components/navbar/Navbar";
 import Verify from "./components/verify/Verify";
 import SendPasswordReset from "./components/send-password-reset/SendPasswordReset";
 import ResetPassword from "./components/reset-password/ResetPassword";
+import ChangeEmail from "./components/change-email/ChangeEmail";
 import FlashMessageContainer from "./components/flash-messages/FlashMessageContainer";
 import { AuthConsumer } from "./context/Auth";
 import mustBeLoggedIn from "./components/hoc/mustBeLoggedIn";
@@ -30,6 +31,7 @@ class App extends React.Component {
               path="/passwordReset/:hash"
               component={ResetPassword}
             />
+            <Route exact path="/changeEmail/:hash" component={ChangeEmail} />
             <Route
               exact
               path="/sendRecoveryEmail"

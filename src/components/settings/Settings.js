@@ -3,6 +3,7 @@ import { Route } from "react-router-dom";
 import FullPage from "../common/containers/FullPage";
 import Container from "../common/containers/Container";
 import ChangePassword from "../change-password/ChangePassword";
+import ChangeEmailInit from "../change-email/ChangeEmailInit";
 import Payment from "../payment/Payment";
 import { Elements } from "react-stripe-elements";
 import LinkList from "../common/link-list/LinkList";
@@ -11,6 +12,11 @@ import "./Settings.scss";
 class Settings extends React.Component {
   state = {
     links: [
+      {
+        icon: <i className="far fa-envelope" />,
+        text: "Email",
+        path: `${this.props.match.url}/email`
+      },
       {
         icon: <i className="fas fa-unlock-alt" />,
         text: "Password",
@@ -42,6 +48,7 @@ class Settings extends React.Component {
                 path={match.path}
                 render={() => <div>Please choose a setting</div>}
               />
+              <Route path={`${match.path}/email`} component={ChangeEmailInit} />
               <Route
                 path={`${match.path}/password`}
                 component={ChangePassword}
