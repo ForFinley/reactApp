@@ -2,7 +2,8 @@ import axios from "axios";
 
 const BASE_URL = "";
 
-export const login = data => axios.post(`${BASE_URL}/userService/signIn`, data);
+export const login = (data, config) =>
+  axios.post(`${BASE_URL}/userService/signIn`, data, config);
 
 export const signUp = data =>
   axios.post(`${BASE_URL}/userService/registration`, data);
