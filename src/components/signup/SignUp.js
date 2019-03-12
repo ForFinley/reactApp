@@ -1,17 +1,7 @@
 import React from "react";
 import { AuthConsumer } from "../../context/Auth";
-import FullPage from "../common/containers/FullPage";
-import {
-  Button,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  Container,
-  Row,
-  Col,
-  FormFeedback
-} from "reactstrap";
+import SinglePageForm from "../common/containers/SinglePageForm";
+import { Button, FormGroup, Label, Input, FormFeedback } from "reactstrap";
 import { Link } from "react-router-dom";
 import withFormValidation from "../hoc/withFormValidation";
 import { signUpFormValidator } from "./signUpFormValidator";
@@ -72,95 +62,84 @@ class SignUp extends React.Component {
     return (
       <AuthConsumer>
         {({ login }) => (
-          <FullPage>
-            <Container>
-              <Row>
-                <Col sm="12" lg={{ size: 8, offset: 2 }}>
-                  <Form>
-                    <h1 className="Form__heading">Sign Up</h1>
+          <SinglePageForm>
+            <h1 className="Form__heading">Sign Up</h1>
 
-                    <FormGroup>
-                      <Label for="email">Email</Label>
-                      <Input
-                        invalid={touched.email && validationMessage.email}
-                        value={email}
-                        type="text"
-                        name="email"
-                        onChange={handleChange}
-                        id="email"
-                        onBlur={handleBlur}
-                      />
-                      <FormFeedback>{validationMessage.email}</FormFeedback>
-                    </FormGroup>
-                    <FormGroup>
-                      <Label for="password">Password</Label>
-                      <Input
-                        invalid={touched.password && validationMessage.password}
-                        value={password}
-                        type="password"
-                        name="password"
-                        onChange={handleChange}
-                        id="password"
-                        onBlur={handleBlur}
-                      />
-                      <FormFeedback>{validationMessage.password}</FormFeedback>
-                    </FormGroup>
-                    <FormGroup>
-                      <Label for="confirmPassword">Confirm Password</Label>
-                      <Input
-                        invalid={
-                          touched.confirmPassword &&
-                          validationMessage.confirmPassword
-                        }
-                        value={confirmPassword}
-                        type="password"
-                        name="confirmPassword"
-                        onChange={handleChange}
-                        id="confirmPassword"
-                        onBlur={handleBlur}
-                      />
-                      <FormFeedback>
-                        {validationMessage.confirmPassword}
-                      </FormFeedback>
-                    </FormGroup>
+            <FormGroup>
+              <Label for="email">Email</Label>
+              <Input
+                invalid={touched.email && validationMessage.email}
+                value={email}
+                type="text"
+                name="email"
+                onChange={handleChange}
+                id="email"
+                onBlur={handleBlur}
+              />
+              <FormFeedback>{validationMessage.email}</FormFeedback>
+            </FormGroup>
+            <FormGroup>
+              <Label for="password">Password</Label>
+              <Input
+                invalid={touched.password && validationMessage.password}
+                value={password}
+                type="password"
+                name="password"
+                onChange={handleChange}
+                id="password"
+                onBlur={handleBlur}
+              />
+              <FormFeedback>{validationMessage.password}</FormFeedback>
+            </FormGroup>
+            <FormGroup>
+              <Label for="confirmPassword">Confirm Password</Label>
+              <Input
+                invalid={
+                  touched.confirmPassword && validationMessage.confirmPassword
+                }
+                value={confirmPassword}
+                type="password"
+                name="confirmPassword"
+                onChange={handleChange}
+                id="confirmPassword"
+                onBlur={handleBlur}
+              />
+              <FormFeedback>{validationMessage.confirmPassword}</FormFeedback>
+            </FormGroup>
 
-                    {loading && (
-                      <FormGroup>
-                        <div className="Form__loading-text">Signing Up...</div>
-                      </FormGroup>
-                    )}
-                    {error &&
-                      !loading && (
-                        <FormGroup>
-                          <div className="Form__error-text">{error}</div>
-                        </FormGroup>
-                      )}
+            {loading && (
+              <FormGroup>
+                <div className="Form__loading-text">Signing Up...</div>
+              </FormGroup>
+            )}
+            {error &&
+              !loading && (
+                <FormGroup>
+                  <div className="Form__error-text">{error}</div>
+                </FormGroup>
+              )}
 
-                    {!loading && (
-                      <FormGroup>
-                        <Button color="primary" onClick={this.submit}>
-                          Sign Up
-                        </Button>{" "}
-                        <GoogleLogin
-                          clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-                          buttonText="Sign in with Google"
-                          onSuccess={res => this.signUpWithGoogle(res, login)}
-                          onFailure={console.error}
-                        />
-                      </FormGroup>
-                    )}
+            {!loading && (
+              <FormGroup>
+                <Button color="primary" onClick={this.submit}>
+                  Sign Up
+                </Button>{" "}
+                <GoogleLogin
+                  clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+                  buttonText="Sign in with Google"
+                  onSuccess={res => this.signUpWithGoogle(res, login)}
+                  onFailure={console.error}
+                />
+              </FormGroup>
+            )}
 
-                    <div className="mb10 font-s">
-                      Already have an account?{" "}
-                      <Link to="/login" className="link">
-                        Login
-                      </Link>
-                    </div>
-                  </Form>
-                </Col>
-              </Row>
-            </Container>
-          </FullPage>
+            <div className="mb10 font-s">
+              Already have an account?{" "}
+              <Link to="/login" className="link">
+                Login
+              </Link>
+            </div>
+          </SinglePageForm>
         )}
       </AuthConsumer>
     );

@@ -1,13 +1,10 @@
 import React from "react";
 import { AuthConsumer } from "../../context/Auth";
-import Input from "../common/input";
-import Form from "../common/form";
-import FormGroup from "../common/form-group";
-import FullPage from "../common/containers/FullPage";
-import Button from "../common/button";
+import SinglePageForm from "../common/containers/SinglePageForm";
+import { Button, FormGroup, Label, Input, FormFeedback } from "reactstrap";
 import withFormValidation from "../hoc/withFormValidation";
 import { loginFormValidator } from "./loginFormValidator";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import "./Login.scss";
 
 class Login extends React.Component {
@@ -28,65 +25,69 @@ class Login extends React.Component {
     return (
       <AuthConsumer>
         {({ login, loginLoading, loginError }) => (
-          <FullPage>
-            <Form onSubmit={e => this.submit(e, login)}>
-              <h1 className="Form__heading">Login</h1>
+          <SinglePageForm>
+            <h1 className="Form__heading">Login</h1>
 
+            <FormGroup>
+              <Label for="email">Email</Label>
+              <Input
+                invalid={touched.email && validationMessage.email}
+                value={email}
+                type="text"
+                name="email"
+                onChange={handleChange}
+                id="email"
+                onBlur={handleBlur}
+              />
+              <FormFeedback>{validationMessage.email}</FormFeedback>
+            </FormGroup>
+            <FormGroup>
+              <Label for="password">Password</Label>
+              <Input
+                invalid={touched.password && validationMessage.password}
+                value={password}
+                type="password"
+                name="password"
+                onChange={handleChange}
+                id="password"
+                onBlur={handleBlur}
+              />
+              <FormFeedback>{validationMessage.password}</FormFeedback>
+            </FormGroup>
+
+            {loginLoading && (
               <FormGroup>
-                <Input
-                  label="Email"
-                  value={email}
-                  type="text"
-                  name="email"
-                  onChange={handleChange}
-                  id="email"
-                  onBlur={handleBlur}
-                  touched={touched.email}
-                  validationMessage={validationMessage.email}
-                />
+                <div className="Form__loading-text">Logging In...</div>
               </FormGroup>
-
-              <FormGroup>
-                <Input
-                  label="Password"
-                  value={password}
-                  type="password"
-                  name="password"
-                  onChange={handleChange}
-                  id="password"
-                  onBlur={handleBlur}
-                  touched={touched.password}
-                  validationMessage={validationMessage.password}
-                />
-              </FormGroup>
-
-              {loginLoading && (
+            )}
+            {loginError &&
+              !loginLoading && (
                 <FormGroup>
-                  <div className="Form__loading-text">Logging In...</div>
-                </FormGroup>
-              )}
-              {loginError &&
-                !loginLoading && (
-                  <FormGroup>
-                    <div className="Form__error-text">{loginError}</div>
-                  </FormGroup>
-                )}
-
-              {!loginLoading && (
-                <FormGroup>
-                  <Button type="submit">Login</Button>
+                  <div className="Form__error-text">{loginError}</div>
                 </FormGroup>
               )}
 
-              <div className="mb10 font-s">
-                Forgot password? <Link className="link" to="/sendRecoveryEmail">Click here</Link>
+            {!loginLoading && (
+              <FormGroup>
+                <Button onClick={e => this.submit(e, login)} color="primary">
+                  Login
+                </Button>
+              </FormGroup>
+            )}
 
-              </div>
-              <div className="font-s">
-                Don't have an account? <Link to="/signup" className="link">Sign Up</Link>
-              </div>
-            </Form>
-          </FullPage>
+            <div className="mb10 font-s">
+              Forgot password?{" "}
+              <Link className="link" to="/sendRecoveryEmail">
+                Click here
+              </Link>
+            </div>
+            <div className="font-s">
+              Don't have an account?{" "}
+              <Link to="/signup" className="link">
+                Sign Up
+              </Link>
+            </div>
+          </SinglePageForm>
         )}
       </AuthConsumer>
     );
