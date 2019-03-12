@@ -3,10 +3,10 @@ import { AuthConsumer } from "../../context/Auth";
 import SinglePageForm from "../common/containers/SinglePageForm";
 import { Button, FormGroup, Label, Input, FormFeedback } from "reactstrap";
 import { Link } from "react-router-dom";
+import GoogleButton from "../common/button/GoogleButton";
 import withFormValidation from "../hoc/withFormValidation";
 import { signUpFormValidator } from "./signUpFormValidator";
-import { signUp, login } from "../../services/AuthService";
-import { GoogleLogin } from "react-google-login";
+import { signUp } from "../../services/AuthService";
 import { withRouter } from "react-router-dom";
 import "./SignUp.scss";
 
@@ -40,19 +40,6 @@ class SignUp extends React.Component {
         });
       }
     }, true);
-  };
-
-  signUpWithGoogle = async ({ tokenObj: { id_token: idToken } }, loginFn) => {
-    await this.setState({ loading: true });
-    const {
-      data: { token }
-    } = await login(
-      { provider: "google" },
-      { headers: { authorization: idToken } }
-    );
-
-    loginFn(null, token);
-    this.props.history.push("/");
   };
 
   render() {
@@ -124,12 +111,7 @@ class SignUp extends React.Component {
                 <Button color="primary" onClick={this.submit}>
                   Sign Up
                 </Button>{" "}
-                <GoogleLogin
-                  clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-                  buttonText="Sign in with Google"
-                  onSuccess={res => this.signUpWithGoogle(res, login)}
-                  onFailure={console.error}
-                />
+                <GoogleButton />
               </FormGroup>
             )}
 

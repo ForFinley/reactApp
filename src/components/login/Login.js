@@ -2,6 +2,7 @@ import React from "react";
 import { AuthConsumer } from "../../context/Auth";
 import SinglePageForm from "../common/containers/SinglePageForm";
 import { Button, FormGroup, Label, Input, FormFeedback } from "reactstrap";
+import GoogleButton from "../common/button/GoogleButton";
 import withFormValidation from "../hoc/withFormValidation";
 import { loginFormValidator } from "./loginFormValidator";
 import { Link } from "react-router-dom";
@@ -72,6 +73,7 @@ class Login extends React.Component {
                 <Button onClick={e => this.submit(e, login)} color="primary">
                   Login
                 </Button>
+                <GoogleButton />
               </FormGroup>
             )}
 
