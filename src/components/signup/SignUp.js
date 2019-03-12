@@ -1,10 +1,17 @@
 import React from "react";
 import { AuthConsumer } from "../../context/Auth";
-import Input from "../common/input";
-import Form from "../common/form";
-import FormGroup from "../common/form-group";
 import FullPage from "../common/containers/FullPage";
-import Button from "../common/button";
+import {
+  Button,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Container,
+  Row,
+  Col,
+  FormFeedback
+} from "reactstrap";
 import { Link } from "react-router-dom";
 import withFormValidation from "../hoc/withFormValidation";
 import { signUpFormValidator } from "./signUpFormValidator";
@@ -66,82 +73,93 @@ class SignUp extends React.Component {
       <AuthConsumer>
         {({ login }) => (
           <FullPage>
-            <Form onSubmit={this.submit}>
-              <h1 className="Form__heading">Sign Up</h1>
+            <Container>
+              <Row>
+                <Col sm="12" lg={{ size: 8, offset: 2 }}>
+                  <Form>
+                    <h1 className="Form__heading">Sign Up</h1>
 
-              <FormGroup>
-                <Input
-                  label="Email"
-                  value={email}
-                  type="text"
-                  name="email"
-                  onChange={handleChange}
-                  id="email"
-                  onBlur={handleBlur}
-                  touched={touched.email}
-                  validationMessage={validationMessage.email}
-                />
-              </FormGroup>
+                    <FormGroup>
+                      <Label for="email">Email</Label>
+                      <Input
+                        invalid={touched.email && validationMessage.email}
+                        value={email}
+                        type="text"
+                        name="email"
+                        onChange={handleChange}
+                        id="email"
+                        onBlur={handleBlur}
+                      />
+                      <FormFeedback>{validationMessage.email}</FormFeedback>
+                    </FormGroup>
+                    <FormGroup>
+                      <Label for="password">Password</Label>
+                      <Input
+                        invalid={touched.password && validationMessage.password}
+                        value={password}
+                        type="password"
+                        name="password"
+                        onChange={handleChange}
+                        id="password"
+                        onBlur={handleBlur}
+                      />
+                      <FormFeedback>{validationMessage.password}</FormFeedback>
+                    </FormGroup>
+                    <FormGroup>
+                      <Label for="confirmPassword">Confirm Password</Label>
+                      <Input
+                        invalid={
+                          touched.confirmPassword &&
+                          validationMessage.confirmPassword
+                        }
+                        value={confirmPassword}
+                        type="password"
+                        name="confirmPassword"
+                        onChange={handleChange}
+                        id="confirmPassword"
+                        onBlur={handleBlur}
+                      />
+                      <FormFeedback>
+                        {validationMessage.confirmPassword}
+                      </FormFeedback>
+                    </FormGroup>
 
-              <FormGroup>
-                <Input
-                  label="Password"
-                  value={password}
-                  type="password"
-                  name="password"
-                  onChange={handleChange}
-                  id="password"
-                  onBlur={handleBlur}
-                  touched={touched.password}
-                  validationMessage={validationMessage.password}
-                />
-              </FormGroup>
+                    {loading && (
+                      <FormGroup>
+                        <div className="Form__loading-text">Signing Up...</div>
+                      </FormGroup>
+                    )}
+                    {error &&
+                      !loading && (
+                        <FormGroup>
+                          <div className="Form__error-text">{error}</div>
+                        </FormGroup>
+                      )}
 
-              <FormGroup>
-                <Input
-                  label="Confirm Password"
-                  value={confirmPassword}
-                  type="password"
-                  name="confirmPassword"
-                  onChange={handleChange}
-                  id="confirmPassword"
-                  onBlur={handleBlur}
-                  touched={touched.confirmPassword}
-                  validationMessage={validationMessage.confirmPassword}
-                />
-              </FormGroup>
+                    {!loading && (
+                      <FormGroup>
+                        <Button color="primary" onClick={this.submit}>
+                          Sign Up
+                        </Button>{" "}
+                        <GoogleLogin
+                          clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+                          buttonText="Sign in with Google"
+                          onSuccess={res => this.signUpWithGoogle(res, login)}
+                          onFailure={console.error}
+                        />
+                      </FormGroup>
+                    )}
 
-              {loading && (
-                <FormGroup>
-                  <div className="Form__loading-text">Signing Up...</div>
-                </FormGroup>
-              )}
-              {error &&
-                !loading && (
-                  <FormGroup>
-                    <div className="Form__error-text">{error}</div>
-                  </FormGroup>
-                )}
-
-              {!loading && (
-                <FormGroup>
-                  <Button type="submit">Sign Up</Button>{" "}
-                  <GoogleLogin
-                    clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-                    buttonText="Sign in with Google"
-                    onSuccess={res => this.signUpWithGoogle(res, login)}
-                    onFailure={console.error}
-                  />
-                </FormGroup>
-              )}
-
-              <div className="mb10 font-s">
-                Already have an account?{" "}
-                <Link to="/login" className="link">
-                  Login
-                </Link>
-              </div>
-            </Form>
+                    <div className="mb10 font-s">
+                      Already have an account?{" "}
+                      <Link to="/login" className="link">
+                        Login
+                      </Link>
+                    </div>
+                  </Form>
+                </Col>
+              </Row>
+            </Container>
           </FullPage>
         )}
       </AuthConsumer>
